@@ -43,8 +43,7 @@ function App() {
 
   return (
     <>
-      <video id="main-stream" autoPlay ref={MainStream} ></video>
-      <button ref={BtnStartStream} id="start-stream">Start Stream</button>
+      <div id="video-grid"></div>
     </>
   )
 }
