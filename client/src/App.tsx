@@ -5,11 +5,13 @@ import ChatBox from "./components/ChatBox";
 function App() {
   
 
-  return (
+  return ( 
     <>
-      
-      <button id="start-stream">Start Stream</button>
+    <div className="border">
+      <video id="main-stream" autoPlay ref={MainStream} ></video>
+      <button className="" onClick={startStream} id="start-stream">Start Stream</button>
       <ChatBox/>
+    </div>
     </>
   )
 }

@@ -12,7 +12,11 @@ const app = express();
 const server = http.createServer(app);
 const peerServer = ExpressPeerServer(server);
 
-const io = new Server(server);
+  const io = new Server(server,{
+    cors: {
+      origin: process.env.FRONT_URL,
+    }
+  });
 
 app.use(cors({
     'origin': '*',
@@ -21,13 +25,9 @@ app.use(cors({
 app.use('/peerjs', peerServer);
 
 
-export const chatSocket = new Server(server, {
-    cors: {
-      origin: process.env.FRONT_URL,
-    }
-});
 
-chatSocket.on("connection", (socket)=>{
+
+io.on("connection", (socket)=>{
     console.log("a user connected");
     
     socket.on('disconnect', () => {

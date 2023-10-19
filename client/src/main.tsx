@@ -11,21 +11,17 @@ import Room from './Room.tsx'
 const BrowserRouter = createBrowserRouter([
   {
     path: "/",
-    action: () => {
-      return <App />
-    }
+    element: <App/>
   },
   {
     path: "/:roomid",
-    action: () => {
-      return <Room/>
-    }
+    element: <Room/>
   }
 ]);
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <RouterProvider router={BrowserRouter}/>
-  </React.StrictMode>,
+  // </React.StrictMode>,
 )
