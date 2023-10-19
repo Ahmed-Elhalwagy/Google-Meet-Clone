@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react"
 import {Peer} from "peerjs"
 import ChatBox from "./components/ChatBox";
-
 function App() {
   
 

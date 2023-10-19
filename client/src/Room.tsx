@@ -1,8 +1,13 @@
-import React from 'react'
+import { io, Socket } from "socket.io-client";
+import MainVideo from "./components/MainVideo";
+
+const socket : Socket = io();
 
 function Room() {
   return (
-    <div>Room</div>
+    <div>
+      <MainVideo socket={socket}></MainVideo>
+    </div>
   )
 }
 

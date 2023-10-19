@@ -1,6 +1,7 @@
 import  { useEffect, useRef, useState } from 'react'
 import Peer, { MediaConnection } from 'peerjs'
-import io from 'socket.io-client'
+import {Socket}  from 'socket.io-client';
+
 
 const getCurrentRoomID = () => {
   const path = window.location.pathname.split('/');
@@ -14,7 +15,11 @@ type Peers = {
   [key: string]: MediaConnection;
 };
 
-export default function MainVideo() {
+interface MainVideoProps {
+  socket: Socket;
+}
+
+export default function MainVideo({socket}: MainVideoProps) {
   const [myPeer,] = useState(new Peer({
     port: 5000,
     host: 'localhost',
@@ -22,7 +27,6 @@ export default function MainVideo() {
   }));
   const [peers, setPeers] = useState({} as Peers);
   const [ROOM_ID,] = useState(getCurrentRoomID()); //window.location.pathname.split('/')[2
-  const [socket,] = useState(io("http://localhost:5000"));
   // const [stream, setStream] = useState(null)
   const myVideo = useRef(document.getElementById('main-video') as HTMLVideoElement);
   const videoGrid = useRef(document.getElementById('video-grid') as HTMLDivElement);
