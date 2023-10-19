@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useEffect, useRef, useState } from "react"
 import {Peer} from "peerjs"
+import ChatBox from "./components/ChatBox";
 
 function App() {
   const [peer, setPeer] = useState<Peer>();
   const [mainStream, setMainStream] = useState<MediaStream>();
   const [peerId, setPeerId] = useState<string>('');
-  const BtnStartStream = useRef<HTMLButtonElement>(null);
   const MainStream =   useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -17,7 +18,7 @@ function App() {
     setPeer(peer);
 
     peer.on('open', (id) => {
-      console.log(id);
+      console.log('My peer ID is: ' + id);
       setPeerId(id);
     })
     console.log(peer.id);
@@ -40,10 +41,13 @@ function App() {
     })
   }
 
+0
 
   return (
     <>
-      <div id="video-grid"></div>
+      <video id="main-stream" autoPlay ref={MainStream} ></video>
+      <button onClick={startStream} id="start-stream">Start Stream</button>
+      <ChatBox/>
     </>
   )
 }
