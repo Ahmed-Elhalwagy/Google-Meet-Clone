@@ -24,21 +24,6 @@ app.use(cors({
 }));
 app.use('/peerjs', peerServer);
 
-
-
-
-io.on("connection", (socket)=>{
-    console.log("a user connected");
-    
-    socket.on('disconnect', () => {
-        console.log('user disconnected');
-      });
-
-      socket.on('chat message', (msg) => {
-        console.log('message: ' + msg);
-      });
-})
-
 const port = process.env.PORT || 5000
 
 io.on('connection', socket => {
@@ -46,6 +31,10 @@ io.on('connection', socket => {
         socket.emit('RoomCreated', uuidV4());
     })
 
+    socket.on('chat message', (msg) => {
+      console.log('message: ' + msg);
+    });
+    
     socket.on('join-room', (roomId, userId) => {
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId)
