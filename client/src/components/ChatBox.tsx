@@ -2,9 +2,9 @@ import { useState } from "react"
 import {io} from "socket.io-client";
 
 
+const socket= io("http://localhost:5000");
 
 function ChatBox() {   
-    const [socket] = useState(io("http://localhost:5000"));
 
     const [message, setMessage] = useState<string>("");
     const [messages, setMessages] = useState<string[]>([]);
