@@ -8,8 +8,8 @@ function App() {
   return ( 
     <>
     <div className="border">
-      <video id="main-stream" autoPlay ref={MainStream} ></video>
-      <button className="" onClick={startStream} id="start-stream">Start Stream</button>
+      {/* <video id="main-stream" autoPlay ref={MainStream} ></video>
+      <button className="" onClick={startStream} id="start-stream">Start Stream</button> */}
       <ChatBox/>
     </div>
     </>
