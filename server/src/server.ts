@@ -11,6 +11,7 @@ const app = express();
 
 const server = http.createServer(app);
 const peerServer = ExpressPeerServer(server);
+let groups = [];
 
   const io = new Server(server,{
     cors: {
@@ -28,6 +29,10 @@ const port = process.env.PORT || 5000
 
 io.on('connection', socket => {
     socket.on('CreateRoom', () => {
+        let room = uuidV4();
+        while(groups.includes(room)){
+          room = uuidV4();
+        }
         socket.emit('RoomCreated', uuidV4());
     })
 
