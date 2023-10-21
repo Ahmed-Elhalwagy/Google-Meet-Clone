@@ -1,12 +1,32 @@
-import { io, Socket } from "socket.io-client";
-import MainVideo from "./components/MainVideo";
+import { Socket } from "socket.io-client";
+// import MainVideo from "./components/MainVideo";
+import ChatBox from "./components/ChatBox";
+import { useParams } from "react-router-dom";
+// import MainVideo from "./components/MainVideo";
 
-const socket : Socket = io();
+interface RoomProps {
+  socket: Socket;
+}
 
-function Room() {
+function Room({socket}: RoomProps) {
+    const {roomId} = useParams();
+    if(roomId === undefined) return;
+
+
+  socket.on("connect", ()=>{
+    console.log('Socket ID:' , socket.id);
+  });
+    socket.on("disconnect", ()=>{
+    console.log('Your are Disconnected')});
+
+  socket.on("user-connected", ()=>{
+    console.log("User Connected");
+  })
+  
   return (
     <div>
-      <MainVideo socket={socket}></MainVideo>
+      <ChatBox socket={socket} roomId={roomId}/>
+      {/* <MainVideo socket={socket} roomId={roomId}></MainVideo> */}
     </div>
   )
 }

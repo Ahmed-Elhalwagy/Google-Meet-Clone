@@ -17,6 +17,7 @@ type Peers = {
 
 interface MainVideoProps {
   socket: Socket;
+  roomId: string;
 }
 
 export default function MainVideo({socket}: MainVideoProps) {

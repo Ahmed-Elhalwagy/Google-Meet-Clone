@@ -1,30 +1,46 @@
-import { useState } from "react"
-import {io} from "socket.io-client";
+import { useEffect, useState } from "react"
+import {Socket} from "socket.io-client";
 
+interface ChatBoxProps {
+    socket: Socket;
+    roomId: string;
+  }
 
-const socket= io("http://localhost:5000");
+function ChatBox({socket, roomId}: ChatBoxProps) {   
 
-function ChatBox() {   
+    const [inputMessage, setInputMessage] = useState<string>("");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [messages, setMessages] = useState<any[]>([]);
 
-    const [message, setMessage] = useState<string>("");
-    const [messages, setMessages] = useState<string[]>([]);
+    useEffect(()=>{
+        socket.volatile.on('chat message', payload =>{
+            setMessages(msgs => [...msgs, payload])
+            console.log('message', payload.msg);
+        })
 
-    const handleSumbit = (e: { preventDefault: () => void; })=>{
+        return ()=> {
+            socket.off('chat message');
+        }
+
+    })
+    
+    const handleSendMessage = (e: { preventDefault: () => void; })=>{
         e.preventDefault();
-        setMessages(msgs => [...msgs, message])
-        socket.emit('chat message', message);
-        setMessage("");
+        if(socket.connected){
+            socket.emit('chat message', {msg: inputMessage, userId: socket.id, roomId:roomId});
+            setInputMessage("");
+        }
     }
 
     return (
     <div>
-        <form onSubmit={handleSumbit}>
-            <input type="text" value={message} onChange={e=> setMessage((e.target.value).trimStart())} />
-            <button disabled={!socket.connected || message.trim()==="" }>Send</button>
+        <form onSubmit={handleSendMessage}>
+            <input type="text" value={inputMessage} onChange={e=> setInputMessage((e.target.value).trimStart())} />
+            <button disabled={!socket.connected || inputMessage.trim()==="" }>Send</button>
         </form>
         <ul>
             {messages.map(msg => { 
-                return <li key={msg}>{msg}</li>
+                return <li key={msg.msg}>{msg.msg}<span>     {msg.userId}</span></li>
             })}
         </ul>
     </div>
