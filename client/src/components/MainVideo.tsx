@@ -58,7 +58,7 @@ export default function MainVideo({socket}: MainVideoProps) {
     })
     
     myPeer.on('open', id => {
-      socket.emit('join-room', ROOM_ID, id)
+      socket.emit('room:join', ROOM_ID, id)
     })
     return ()=> {
       myPeer.destroy()
