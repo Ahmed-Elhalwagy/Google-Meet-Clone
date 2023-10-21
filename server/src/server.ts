@@ -11,6 +11,7 @@ const app = express();
 
 const server = http.createServer(app);
 const peerServer = ExpressPeerServer(server);
+let groups = [];
 
   const io = new Server(server,{
     cors: {
@@ -32,19 +33,19 @@ io.engine.generateId = (req) => {
 }
 
 io.on('connection', socket => {
-    console.log("A user Connected on socket", socket.id);  
+    socket.on('CreateRoom', () => {
+        let room = uuidV4();
+        while(groups.includes(room)){
+          room = uuidV4();
+        }
+        socket.emit('RoomCreated', uuidV4());
+    })
+
+    socket.on('chat message', (msg) => {
+      console.log('message: ' + msg);
+    });
     
-    socket.on('room:join', ({roomId, userId}) => {
-      const rooms:string[] = [];
-      
-
-      if(!rooms.includes(roomId)){
-        rooms.push(roomId);
-      }
-
-      console.log(`${userId} joined room ${roomId}`)
-
-
+    socket.on('join-room', (roomId, userId) => {
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId)
       
