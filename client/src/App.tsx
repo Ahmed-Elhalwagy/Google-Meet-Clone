@@ -2,7 +2,6 @@
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {Socket} from "socket.io-client";
-import { nanoid } from 'nanoid'
 
 interface AppProps {
   socket: Socket;
@@ -14,14 +13,16 @@ function App({socket}: AppProps) {
   const navigate : NavigateFunction = useNavigate();
 
   const handleCreateRoom = (): void=>{
-    const roomId = nanoid(8);
-    socket.emit('room:join', {roomId , userId: socket.id});
-    navigate(`/${roomId}`);
-    
+    socket.emit('room:create');
+    let roomId : string = "";
+    socket.on('room:created', (payload)=>{
+      roomId = payload.room;
+      console.log(payload.room);
+      navigate(`/${roomId}`);
+    })
   }
 
   const hadnleJoinRoom = (roomId: string): void=>{
-    socket.emit('room:join', {roomId , userId: socket.id});
     navigate(`/${roomId}`);
 
   }
