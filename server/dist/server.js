@@ -33,16 +33,14 @@ io.on('connection', socket => {
     socket.on('room:create', () => {
         let room = nanoid(8);
         // while(groups.includes(room)){
-        //   room = nanoid();
+        //   room = nanoid(8);
         // }
         groups.push(room);
-        socket.join(room);
         console.log('Room created => ', room);
         socket.emit('room:created', { room });
     });
     socket.on('room:join', ({ roomId, userId }) => {
-        if (!groups.includes(roomId))
-            return;
+        console.log('Room joined => ', roomId);
         socket.emit('room:joined', { roomId });
         socket.join(roomId);
         console.log(`User ${socket.id} joined room ${roomId}`);

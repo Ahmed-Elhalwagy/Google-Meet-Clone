@@ -19,7 +19,7 @@ This is a simple TypeScript React application using Peer.js, Socket.io for real-
 
    ```bash
    cd Google-Meet-Clone
-   npm install && cd client && npm install
+   npm install && cd client && npm install && cd ../server && npm install
    ```
 
 3. Run the development server:
@@ -27,6 +27,6 @@ This is a simple TypeScript React application using Peer.js, Socket.io for real-
    ```bash
    npm run dev
     ```
-    Port `5000` for server and `3000` for client
+    Port `5000` for server and `3001` for client
 
 

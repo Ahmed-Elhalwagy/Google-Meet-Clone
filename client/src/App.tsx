@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {Socket} from "socket.io-client";
 
@@ -13,14 +14,13 @@ function App({socket}: AppProps) {
   const navigate : NavigateFunction = useNavigate();
 
   const handleCreateRoom = (): void=>{
-    let roomId;
-    socket.emit('room:create', { userId: socket.id});
-    socket.on('room:created', ({room})=>{
-      console.log(room);
-      roomId = room
+    socket.emit('room:create');
+    let roomId : string = "";
+    socket.on('room:created', (payload)=>{
+      roomId = payload.room;
+      console.log(payload.room);
       navigate(`/${roomId}`);
     })
-    
   }
 
   const hadnleJoinRoom = (e: { preventDefault: () => void; }, roomId: string): void=>{
