@@ -12,7 +12,6 @@ function Room({socket}: RoomProps) {
     const {roomId} = useParams();
     if(roomId === undefined) return;
 
-
   socket.on("connect", ()=>{
     console.log('Socket ID:' , socket.id);
   });

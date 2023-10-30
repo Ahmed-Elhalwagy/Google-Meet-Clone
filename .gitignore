@@ -1,11 +1,13 @@
 # dependencies
 /client/build
 /client/node_modules/
+/client/dist
 /dist
 
 /server/build
 /server/node_modules/
 /server/dist
+/server/.env
 
 node_modules/
 

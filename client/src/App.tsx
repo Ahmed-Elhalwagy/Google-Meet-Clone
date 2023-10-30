@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {Socket} from "socket.io-client";
-import { nanoid } from 'nanoid'
 
 interface AppProps {
   socket: Socket;
@@ -14,15 +13,23 @@ function App({socket}: AppProps) {
   const navigate : NavigateFunction = useNavigate();
 
   const handleCreateRoom = (): void=>{
-    const roomId = nanoid(8);
-    socket.emit('room:join', {roomId , userId: socket.id});
-    navigate(`/${roomId}`);
+    let roomId;
+    socket.emit('room:create', { userId: socket.id});
+    socket.on('room:created', ({room})=>{
+      console.log(room);
+      roomId = room
+      navigate(`/${roomId}`);
+    })
     
   }
 
-  const hadnleJoinRoom = (roomId: string): void=>{
+  const hadnleJoinRoom = (e: { preventDefault: () => void; }, roomId: string): void=>{
+    e.preventDefault();
     socket.emit('room:join', {roomId , userId: socket.id});
-    navigate(`/${roomId}`);
+
+    socket.on('room:joined', ({roomId})=>{      
+      navigate(`/${roomId}`);
+    })
 
   }
 
@@ -30,7 +37,7 @@ function App({socket}: AppProps) {
     <>
     <div className="bg-slate-500">
       <button onClick={handleCreateRoom}>Create a room</button>
-      <form onSubmit={()=>hadnleJoinRoom(inputRoom)}>
+      <form onSubmit={(e)=>hadnleJoinRoom(e, inputRoom)}>
             <input type="text" value={inputRoom} placeholder="Enter the Room Id" onChange={e=> setInputRoom((e.target.value).trimStart())} />
             <button >Join Room</button>
         </form>

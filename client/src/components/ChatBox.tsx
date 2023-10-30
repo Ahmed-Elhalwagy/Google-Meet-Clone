@@ -3,7 +3,7 @@ import {Socket} from "socket.io-client";
 
 interface ChatBoxProps {
     socket: Socket;
-    roomId: string;
+    roomId: string | undefined;
   }
 
 function ChatBox({socket, roomId}: ChatBoxProps) {   
@@ -40,7 +40,7 @@ function ChatBox({socket, roomId}: ChatBoxProps) {
         </form>
         <ul>
             {messages.map(msg => { 
-                return <li key={msg.msg}>{msg.msg}<span>     {msg.userId}</span></li>
+                return <li key={msg.msg}>{msg.msg}</li>
             })}
         </ul>
     </div>
