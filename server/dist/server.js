@@ -32,18 +32,21 @@ io.on('connection', socket => {
     });
     socket.on('room:create', () => {
         let room = nanoid(8);
-        // while(groups.includes(room)){
-        //   room = nanoid(8);
-        // }
         groups.push(room);
         console.log('Room created => ', room);
         socket.emit('room:created', { room });
     });
     socket.on('room:join', ({ roomId, userId }) => {
         console.log('Room joined => ', roomId);
-        socket.emit('room:joined', { roomId });
-        socket.join(roomId);
-        console.log(`User ${socket.id} joined room ${roomId}`);
+        if (groups.includes(roomId)) {
+            socket.emit('room:joined', { roomId });
+            socket.join(roomId);
+            console.log(`User ${socket.id} joined room ${roomId}`);
+        }
+        else {
+            console.error(`Invalid Room ID`);
+            socket.emit("join:not-found");
+        }
         socket.on('disconnect', () => {
             socket.to(roomId).emit('user-disconnected', userId);
         });

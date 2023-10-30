@@ -13,13 +13,14 @@ function App({socket}: AppProps) {
   const navigate : NavigateFunction = useNavigate();
 
   const handleCreateRoom = (): void=>{
-    socket.emit('room:create');
-    let roomId : string = "";
-    socket.on('room:created', (payload)=>{
-      roomId = payload.room;
-      console.log(payload.room);
+    let roomId;
+    socket.emit('room:create', { userId: socket.id});
+    socket.on('room:created', ({room})=>{
+      console.log(room);
+      roomId = room
       navigate(`/${roomId}`);
     })
+    
   }
 
   const hadnleJoinRoom = (e: { preventDefault: () => void; }, roomId: string): void=>{
@@ -28,6 +29,10 @@ function App({socket}: AppProps) {
 
     socket.on('room:joined', ({roomId})=>{      
       navigate(`/${roomId}`);
+    })
+
+    socket.once("join:not-found", ()=>{
+      console.log("Room not found");
     })
 
   }

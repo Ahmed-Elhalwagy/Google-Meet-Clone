@@ -8,11 +8,12 @@ function App(_a) {
     var _b = react_1.useState(""), inputRoom = _b[0], setInputRoom = _b[1];
     var navigate = react_router_dom_1.useNavigate();
     var handleCreateRoom = function () {
-        socket.emit('room:create');
-        var roomId = "";
-        socket.on('room:created', function (payload) {
-            roomId = payload.room;
-            console.log(payload.room);
+        var roomId;
+        socket.emit('room:create', { userId: socket.id });
+        socket.on('room:created', function (_a) {
+            var room = _a.room;
+            console.log(room);
+            roomId = room;
             navigate("/" + roomId);
         });
     };
@@ -22,6 +23,9 @@ function App(_a) {
         socket.on('room:joined', function (_a) {
             var roomId = _a.roomId;
             navigate("/" + roomId);
+        });
+        socket.once("join:not-found", function () {
+            console.log("Room not found");
         });
     };
     return (React.createElement(React.Fragment, null,
